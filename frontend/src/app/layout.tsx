@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { ColorSchemeScript, MantineProvider, createTheme } from "@mantine/core";
 import "./globals.css";
 import { Providers } from "./providers";
 
-const inter = Inter({ subsets: ["latin"] });
+const theme = createTheme({ fontFamily: "Inter, sans-serif" });
 
 export const metadata: Metadata = {
   title: "Hackathon App",
@@ -17,8 +17,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Providers>{children}</Providers>
+      <head>
+        <ColorSchemeScript />
+      </head>
+      <body>
+        <MantineProvider theme={theme}>
+          <Providers>{children}</Providers>
+        </MantineProvider>
       </body>
     </html>
   );

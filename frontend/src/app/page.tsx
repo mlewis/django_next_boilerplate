@@ -2,8 +2,17 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Anchor,
+  Badge,
+  Card,
+  Container,
+  Group,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 
 async function fetchItems() {
   const { data, error } = await apiClient.GET("/api/items/");
@@ -18,68 +27,62 @@ export default function HomePage() {
   });
 
   return (
-    <main className="container mx-auto py-12 px-4">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold tracking-tight">Hackathon Boilerplate</h1>
-        <p className="mt-2 text-muted-foreground">
-          Django Ninja + Next.js + Tailwind + shadcn + TanStack Query
-        </p>
-      </div>
+    <Container py="xl">
+      <Stack mb="xl" gap="xs">
+        <Title order={1}>Hackathon Boilerplate</Title>
+        <Text c="dimmed">Django Ninja + Next.js + Mantine + TanStack Query</Text>
+      </Stack>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle>Items</CardTitle>
-          <CardDescription>
-            Fetched from <code className="text-xs bg-muted px-1 py-0.5 rounded">/api/items/</code>{" "}
+      <Card withBorder shadow="sm" radius="md" mb="lg">
+        <Stack gap="xs" mb="md">
+          <Text fw={600} size="xl">Items</Text>
+          <Text size="sm" c="dimmed">
+            Fetched from <Text component="code" size="xs" bg="gray.1" px={4} py={2} style={{ borderRadius: 4 }}>/api/items/</Text>{" "}
             via TanStack Query with fully typed{" "}
-            <code className="text-xs bg-muted px-1 py-0.5 rounded">openapi-fetch</code>
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {isLoading && <p className="text-muted-foreground">Loading...</p>}
-          {isError && (
-            <p className="text-destructive">
-              Could not load items — make sure the backend is running and you are authenticated.
-            </p>
-          )}
-          {items && items.length === 0 && (
-            <p className="text-muted-foreground">No items yet. Create one via the API.</p>
-          )}
-          {items && items.length > 0 && (
-            <ul className="space-y-3">
-              {items.map((item) => (
-                <li key={item.id} className="flex items-center gap-3 rounded-md border p-3">
-                  <span className="flex-1 font-medium">{item.title}</span>
-                  <Badge variant={item.completed ? "default" : "secondary"}>
-                    {item.completed ? "Done" : "Pending"}
-                  </Badge>
-                </li>
-              ))}
-            </ul>
-          )}
-        </CardContent>
+            <Text component="code" size="xs" bg="gray.1" px={4} py={2} style={{ borderRadius: 4 }}>openapi-fetch</Text>
+          </Text>
+        </Stack>
+
+        {isLoading && <Text c="dimmed">Loading...</Text>}
+        {isError && (
+          <Text c="red">
+            Could not load items — make sure the backend is running and you are authenticated.
+          </Text>
+        )}
+        {items && items.length === 0 && (
+          <Text c="dimmed">No items yet. Create one via the API.</Text>
+        )}
+        {items && items.length > 0 && (
+          <Stack gap="sm">
+            {items.map((item) => (
+              <Group
+                key={item.id}
+                justify="space-between"
+                p="sm"
+                style={{ border: "1px solid var(--mantine-color-gray-3)", borderRadius: "var(--mantine-radius-md)" }}
+              >
+                <Text fw={500}>{item.title}</Text>
+                <Badge color={item.completed ? "green" : "gray"}>
+                  {item.completed ? "Done" : "Pending"}
+                </Badge>
+              </Group>
+            ))}
+          </Stack>
+        )}
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-3 text-sm text-muted-foreground">
-        <div className="rounded-md border p-4">
-          <p className="font-semibold text-foreground mb-1">API Docs</p>
-          <a href="/api/docs" className="text-primary hover:underline">
-            /api/docs →
-          </a>
-        </div>
-        <div className="rounded-md border p-4">
-          <p className="font-semibold text-foreground mb-1">OpenAPI Schema</p>
-          <a href="/api/openapi.json" className="text-primary hover:underline">
-            /api/openapi.json →
-          </a>
-        </div>
-        <div className="rounded-md border p-4">
-          <p className="font-semibold text-foreground mb-1">Admin</p>
-          <a href="/admin/" className="text-primary hover:underline">
-            /admin/ →
-          </a>
-        </div>
-      </div>
-    </main>
+      <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md">
+        {[
+          { label: "API Docs", href: "/api/docs", linkText: "/api/docs →" },
+          { label: "OpenAPI Schema", href: "/api/openapi.json", linkText: "/api/openapi.json →" },
+          { label: "Admin", href: "/admin/", linkText: "/admin/ →" },
+        ].map(({ label, href, linkText }) => (
+          <Card key={href} withBorder p="md">
+            <Text fw={600} mb={4}>{label}</Text>
+            <Anchor href={href} size="sm">{linkText}</Anchor>
+          </Card>
+        ))}
+      </SimpleGrid>
+    </Container>
   );
 }
