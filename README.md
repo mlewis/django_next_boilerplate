@@ -7,7 +7,7 @@ A batteries-included full-stack boilerplate for moving fast.
 | Backend | Django 5 + Django Ninja + ninja-jwt |
 | Database | SQLite (dev) / PostgreSQL (prod) |
 | Frontend | Next.js 14 (App Router) + TypeScript |
-| Styling | Tailwind CSS + shadcn/ui |
+| Styling | Mantine UI v7 |
 | Data fetching | TanStack Query v5 + openapi-fetch |
 | API types | openapi-typescript (generated from Django Ninja) |
 | Linting | ruff (Python) + ESLint (TS) |
@@ -159,7 +159,6 @@ pnpm typecheck
 ├── frontend/
 │   ├── src/
 │   │   ├── app/                # Next.js App Router pages
-│   │   ├── components/ui/      # shadcn components
 │   │   ├── lib/
 │   │   │   ├── api-client.ts   # openapi-fetch typed client
 │   │   │   └── query-client.ts # TanStack Query singleton
